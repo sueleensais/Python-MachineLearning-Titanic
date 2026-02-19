@@ -1,4 +1,4 @@
-# 📘 **Titanic - Machine Learning from Disaster**
+# **Titanic - Machine Learning from Disaster**
 
 # **Descrição:**
 
@@ -208,6 +208,7 @@ Em versões futuras, serão aplicadas técnicas de imputação e engenharia de f
 - Tratar valores ausentes em `Age`, `Cabin` e `Embarked`.
 - Incluir novas features.
 - Testar outros algoritmos (Logistic Regression, XGBoost, LightGBM).
+
 
 
 
