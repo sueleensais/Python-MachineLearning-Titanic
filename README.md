@@ -161,7 +161,7 @@ Após treinar o primeiro modelo de Machine Learning (Random Forest), foi gerado 
 - **Features utilizadas:** `Pclass`, `Sex`, `SibSp`, `Parch`
 - **Pontuação pública obtida:** **0.77511**
 
-![Resultado da submissão](images/submission.png)
+![Resultado da submissão](images/result.png)
 
 Esse resultado representa o **baseline inicial** do projeto. A partir dele, novas versões poderão ser criadas com ajustes e inclusão de mais variáveis para melhorar a precisão.
 Outros fatores como **classe socioeconômica (Pclass)**, **idade (Age)** e **número de familiares a bordo (SibSp, Parch)** também influenciaram as chances de sobrevivência.
@@ -177,6 +177,7 @@ A escolha se deve ao fato de que as variáveis utilizadas (`Pclass`, `Sex`, `Sib
 O objetivo foi construir um **baseline simples** e funcional.
 
 Em versões futuras, serão aplicadas técnicas de imputação e engenharia de features para lidar com colunas como `Age`, `Cabin` e `Embarked`, que possuem valores ausentes e podem contribuir para melhorar a performance do modelo.
+
 
 
 
