@@ -10,15 +10,13 @@ O desafio consiste em utilizar dados reais dos passageiros do Titanic (como idad
 
 # **Dados**
 
-Fonte: Kaggle
+**Fonte: Kaggle**
 
 `train.csv`: Conterá os detalhes de um subconjunto dos passageiros a bordo (891, para ser exato) e, o que é mais importante, revelará se eles sobreviveram ou não, também conhecido como a "verdade fundamental".
 
 `test.csv`: Conjunto de dados contém informações semelhantes, mas não revela a "verdade fundamental" para cada passageiro. Sua tarefa é prever esses resultados.
 
-Usando os padrões encontrados nos `train.csv` dados, previ se os outros 418 passageiros a bordo (encontrados em `test.csv`) sobreviveram.
-
-# **Dicionário de Dados:**
+**Dicionário de Dados:**
 
 → Arquivo `train.csv`
 
@@ -53,7 +51,7 @@ Mesma estrutura do `train.csv`, **exceto pela ausência da coluna `Survived`**, 
 4. Modelagem com Random Forest
 5. Avaliação e submissão no Kaggle
 
-# **Baseline**
+# **1. Entendimento do problema**
 
 ## **Importação de bibliotecas numpy e pandas:**
 
@@ -78,7 +76,9 @@ train_data = pd.read_csv('/kaggle/input/competitions/titanic/train.csv')
 test_data = pd.read_csv('/kaggle/input/competitions/titanic/test.csv')
 ```
 
-## **Exploração inicial dos dados:**
+# **2. Exploração inicial dos dados:**
+
+## **Visualização dos dados** 
 
 in:
 
@@ -114,7 +114,7 @@ out:
 
 O método `.head()` do **pandas** mostra, por padrão, as **primeiras 5 linhas** do DataFrame. O dataset contém **891 linhas no `train.csv`** e **418 linhas no `test.csv`**.
 
-# **Análise inicial: taxa de sobrevivência por gênero** 
+## **Análise inicial: taxa de sobrevivência por gênero** 
 
 in:
 
@@ -143,33 +143,41 @@ Com a análise inicial, verificamos que aproximadamente **74% das mulheres** sob
 
 Esse resultado reflete a política de evacuação da época (“mulheres e crianças primeiro”), mostrando que o gênero foi um fator determinante. No entanto, essa análise se baseia em apenas uma coluna (`Sex`). 
 
-# **Primeiro modelo de Machine Learning: Random Forest**
+# **3.Pré Processamento**
+
+## **Definindo as Features**
 
 ```python
 from sklearn.ensemble import RandomForestClassifier
 
-# Definição da variável alvo (y)
+## Definição da variável alvo (y)
 
 y = train_data["Survived"]
 
-# Seleção das variáveis explicativas (features)
+## Seleção das variáveis explicativas (features)
 
 features = ["Pclass", "Sex", "SibSp", "Parch"]
 
-# Transformação de variáveis categóricas (pd.get_dummies)
+## Transformação de variáveis categóricas (pd.get_dummies)
 
 X = pd.get_dummies(train_data[features])
 X_test = pd.get_dummies(test_data[features])
+```
 
-# Criação do modelo Random Forest
+# **4 - Modelagem com Random Forest**
+
+## **Criando o primeiro modelo de Machine Learning**
+
+```python
+## Criação do modelo Random Forest
 
 model = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=1)
 
-# Treinamento do modelo
+## Treinamento do modelo
 
 model.fit(X, y)
 
-# Geração de previsões
+## Geração de previsões
 
 predictions = model.predict(X_test)
 
@@ -180,23 +188,17 @@ output.to_csv('submission.csv', index=False)
 print("Your submission was successfully saved!")
 ```
 
-# **Resultados da submissão:**
+# **5. Avaliação e submissão no Kaggle**
 
 Após treinar o primeiro modelo de Machine Learning (Random Forest), foi gerado o arquivo `submission.csv` e enviado para a competição **Titanic - Machine Learning from Disaster** no Kaggle.
 
-**Modelo utilizado:** Random Forest Classifier
-- **Configuração:** 100 árvores, profundidade máxima = 5, `random_state=1`
-- **Features utilizadas:** `Pclass`, `Sex`, `SibSp`, `Parch`
-- **Pontuação pública obtida:** **0.77511**
+- **Modelo**: Random Forest  
+- **Features**: Pclass, Sex, SibSp, Parch  
+- **Pontuação pública**: 0.77511, considerada um bom resultado para iniciantes e demonstrando capacidade de modelagem preditiva.
 
 ![Resultado da submissão](/result.png)
 
-Esse resultado representa o **baseline inicial** do projeto. A partir dele, novas versões poderão ser criadas com ajustes e inclusão de mais variáveis para melhorar a precisão.
-Outros fatores como **classe socioeconômica (Pclass)**, **idade (Age)** e **número de familiares a bordo (SibSp, Parch)** também influenciaram as chances de sobrevivência.
-
-Para capturar esses padrões mais complexos, devem ser utilizadas técnicas de **aprendizado de máquina**, que permitem analisar múltiplas variáveis simultaneamente e gerar previsões mais precisas.
-
-# **Nota sobre valores ausentes**
+## **Nota sobre valores ausentes**
 
 Neste primeiro modelo não foi realizado tratamento de valores ausentes.
 
@@ -205,10 +207,3 @@ A escolha se deve ao fato de que as variáveis utilizadas (`Pclass`, `Sex`, `Sib
 O objetivo foi construir um **baseline simples** e funcional.
 
 Em versões futuras, serão aplicadas técnicas de imputação e engenharia de features para lidar com colunas como `Age`, `Cabin` e `Embarked`, que possuem valores ausentes e podem contribuir para melhorar a performance do modelo.
-
-# **Próximos Passos**
-
-- Tratar valores ausentes em `Age`, `Cabin` e `Embarked`.
-- Incluir novas features.
-- Testar outros algoritmos (Logistic Regression, XGBoost, LightGBM).
-
