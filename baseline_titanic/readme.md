@@ -183,7 +183,7 @@ output.to_csv('submission.csv', index=False)
 print("Your submission was successfully saved!")
 ```
 
-# **5. Avaliação**
+# **5. Resultado**
 
 Após treinar o primeiro modelo de Machine Learning (Random Forest), foi gerado o arquivo `submission.csv` e enviado para a competição **Titanic - Machine Learning from Disaster** no Kaggle.
 
