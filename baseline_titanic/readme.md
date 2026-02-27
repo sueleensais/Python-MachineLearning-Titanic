@@ -25,12 +25,12 @@ O desafio consiste em utilizar dados reais dos passageiros do Titanic (como idad
 - **PassengerId** → Identificador do passageiro
 - **Name** → Nome completo do passageiro
 - **Sex** → Sexo (male = masculino, female = feminino)
-- **Age** → Idade em anos (valores fracionados possíveis, ex.: 34.5)
+- **Age** → Idade em anos 
 - **SibSp** → Número de irmãos/cônjuges a bordo
 - **Parch** → Número de pais/filhos a bordo
 - **Ticket** → Número do bilhete
 - **Fare** → Tarifa (valor pago pela passagem)
-- **Cabin** → Cabine (muitos valores ausentes)
+- **Cabin** → Cabine 
 - **Embarked** → Porto de embarque (C = Cherbourg, Q = Queenstown, S = Southampton)
 
 → Arquivo `test.csv` 
