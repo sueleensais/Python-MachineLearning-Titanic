@@ -1,27 +1,16 @@
-# **Titanic - Machine Learning from Disaster**
+# **Titanic: Machine Learning from Disaster**
 
 # **Descrição:**
 
-Este projeto utiliza o dataset “*Titanic - Machine Learning from Disaster”* do Kaggle para prever quais passageiros tinham maior probabilidade de sobreviver ao naufrágio. É um desafio clássico de aprendizado de máquina, ideal para iniciantes em ciência de dados.
-
-# **Contexto histórico**
-
-- **Data:** Na noite de 14 de abril de 1912, o Titanic colidiu com um iceberg no Atlântico Norte e afundou nas primeiras horas do dia 15.
-- **Local:** Aproximadamente 640 km a leste da Ilha de Terra Nova, no Canadá.
-- **Passageiros e tripulação:** Cerca de 2.224 pessoas estavam a bordo.
-- **Mortes:** 1.502 pessoas perderam a vida, tornando-se uma das maiores tragédias marítimas da época.
+O "Titanic: Machine Learning from Disaster" é um dos projetos e competições mais famosos e populares da plataforma Kaggle, projetado especificamente para iniciantes em Data Science e Machine Learning.
 
 # **O Desafio:**
 
-O naufrágio do Titanic é um dos mais infames da história.
-
-Em 15 de abril de 1912, durante sua viagem inaugural, o RMS Titanic, amplamente considerado "inafundável", afundou após colidir com um iceberg. Infelizmente, não havia botes salva-vidas suficientes para todos a bordo, resultando na morte de 1.502 dos 2.224 passageiros e tripulantes.
-
-Embora houvesse um elemento de sorte envolvido na sobrevivência, parece que alguns grupos de pessoas tinham maior probabilidade de sobreviver do que outros.
-
-Neste desafio, pedimos que você construa um modelo preditivo que responda à pergunta: "que tipos de pessoas tinham maior probabilidade de sobreviver?", usando dados de passageiros (ou seja, nome, idade, sexo, classe socioeconômica, etc.).
+O desafio consiste em utilizar dados reais dos passageiros do Titanic (como idade, sexo, classe socioeconômica, tarifa paga, etc.) para construir um modelo preditivo que determine se um determinado passageiro sobreviveu ou não ao naufrágio ocorrido em 1912.
 
 # **Dados**
+
+Fonte: Kaggle
 
 `train.csv`: Conterá os detalhes de um subconjunto dos passageiros a bordo (891, para ser exato) e, o que é mais importante, revelará se eles sobreviveram ou não, também conhecido como a "verdade fundamental".
 
@@ -50,7 +39,21 @@ Usando os padrões encontrados nos `train.csv` dados, previ se os outros 418 pas
 
 Mesma estrutura do `train.csv`, **exceto pela ausência da coluna `Survived`**, que é justamente o alvo a ser previsto.
 
-# **Passo a passo**
+# **Contexto histórico**
+
+- **Data:** Na noite de 14 de abril de 1912, o Titanic colidiu com um iceberg no Atlântico Norte e afundou nas primeiras horas do dia 15.
+- **Local:** Aproximadamente 640 km a leste da Ilha de Terra Nova, no Canadá.
+- **Passageiros e tripulação:** Cerca de 2.224 pessoas estavam a bordo.
+- **Mortes:** 1.502 pessoas perderam a vida, tornando-se uma das maiores tragédias marítimas da época.
+
+# **Pipeline**
+1. Entendimento do problema
+2. Exploração inicial dos dados
+3. Pré-processamento (baseline sem tratamento de valores ausentes)
+4. Modelagem com Random Forest
+5. Avaliação e submissão no Kaggle
+
+# **Baseline**
 
 ## **Importação de bibliotecas numpy e pandas:**
 
@@ -68,7 +71,7 @@ for filename in filenames:
 print(os.path.join(dirname, filename))
 ```
 
-## **Carregamento dos dados:**
+## **Carregando os dados:**
 
 ```python
 train_data = pd.read_csv('/kaggle/input/competitions/titanic/train.csv')
@@ -208,10 +211,4 @@ Em versões futuras, serão aplicadas técnicas de imputação e engenharia de f
 - Tratar valores ausentes em `Age`, `Cabin` e `Embarked`.
 - Incluir novas features.
 - Testar outros algoritmos (Logistic Regression, XGBoost, LightGBM).
-
-
-
-
-
-
 
