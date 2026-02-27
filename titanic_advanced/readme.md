@@ -2,7 +2,8 @@
 
 # **Descrição:**
 
-O [Titanic: Machine Learning from Disaster](https://www.kaggle.com/competitions/titanic) é um dos projetos e competições mais famosos e populares da plataforma Kaggle, projetado especificamente para iniciantes em Data Science e Machine Learning.
+Este projeto faz parte da competição **[Titanic: Machine Learning from Disaster](https://www.kaggle.com/competitions/titanic)** no Kaggle.  
+O objetivo é prever quais passageiros sobreviveram ao naufrágio do Titanic em 1912, utilizando técnicas mais avançadas de **pré-processamento, engenharia de features e modelos de Machine Learning**.
 
 # **O Desafio:**
 
@@ -136,7 +137,7 @@ plt.xlabel("Idade")
 plt.ylabel("Frequência")
 plt.show()
 ```
-![Distribuição da Idade](distribuicao_idade.png)
+![Distribuição da Idade](titanic_advanced/images/idade_distribuicao.png)
 
 # Gráfico de Distribuição: Tarifa
 ```python
