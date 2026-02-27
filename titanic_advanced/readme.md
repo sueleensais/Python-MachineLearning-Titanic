@@ -83,40 +83,6 @@ test_data = pd.read_csv("/kaggle/input/competitions/titanic/test.csv")
 
 # Visualização inicial dos dados 
 
-in:
-
-```python
-train_data.head()
-```
-
-out:
-
-| **PassengerId** | **Survived** | **Pclass** | **Name** | **Sex** | **Age** | **SibSp** | **Parch** | **Ticket** | **Fare** | **Cabin** | **Embarked** |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| **0** | 1 | 0 | 3 | Braund, Mr. Owen Harris | male | 22.0 | 1 | 0 | A/5 21171 | 7.2500 | NaN |
-| **1** | 2 | 1 | 1 | Cumings, Mrs. John Bradley (Florence Briggs Th... | female | 38.0 | 1 | 0 | PC 17599 | 71.2833 | C85 |
-| **2** | 3 | 1 | 3 | Heikkinen, Miss. Laina | female | 26.0 | 0 | 0 | STON/O2. 3101282 | 7.9250 | NaN |
-| **3** | 4 | 1 | 1 | Futrelle, Mrs. Jacques Heath (Lily May Peel) | female | 35.0 | 1 | 0 | 113803 | 53.1000 | C123 |
-| **4** | 5 | 0 | 3 | Allen, Mr. William Henry | male | 35.0 | 0 | 0 | 373450 | 8.0500 | NaN |
-
-in:
-
-```python
-test_data.head()
-```
-
-out:
-
-|  | **PassengerId** | **Pclass** | **Name** | **Sex** | **Age** | **SibSp** | **Parch** | **Ticket** | **Fare** | **Cabin** | **Embarked** |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| **0** | 892 | 3 | Kelly, Mr. James | male | 34.5 | 0 | 0 | 330911 | 7.8292 | NaN | Q |
-| **1** | 893 | 3 | Wilkes, Mrs. James (Ellen Needs) | female | 47.0 | 1 | 0 | 363272 | 7.0000 | NaN | S |
-| **2** | 894 | 2 | Myles, Mr. Thomas Francis | male | 62.0 | 0 | 0 | 240276 | 9.6875 | NaN | Q |
-| **3** | 895 | 3 | Wirz, Mr. Albert | male | 27.0 | 0 | 0 | 315154 | 8.6625 | NaN | S |
-| **4** | 896 | 3 | Hirvonen, Mrs. Alexander (Helga E Lindqvist) | female | 22.0 | 1 | 1 | 3101298 | 12.2875 | NaN | S |
-
-O método `.head()` do **pandas** mostra, por padrão, as **primeiras 5 linhas** do DataFrame. O dataset contém **891 linhas no `train.csv`** e **418 linhas no `test.csv`**.
-
 # Importação das bibliotecas de visualização
 ```python
 import matplotlib.pyplot as plt
@@ -129,6 +95,7 @@ sns.set(style="whitegrid")
 # Explorando as distribuições
 
 # Gráfico de Distribuição: Idade
+
 ```python
 plt.figure(figsize=(8,5))
 sns.histplot(train_data['Age'].dropna(), bins=30, kde=True, color="skyblue")
@@ -136,8 +103,11 @@ plt.title("Distribuição da Idade dos Passageiros")
 plt.xlabel("Idade")
 plt.ylabel("Frequência")
 plt.show()
+
 ```
-![Distribuição da Idade](titanic_advanced/images/idade_distribuicao.png)
+
+![Distribuição da Idade](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/distribuicao-idade.png?raw=true)
+
 
 # Gráfico de Distribuição: Tarifa
 ```python
@@ -148,7 +118,7 @@ plt.xlabel("Tarifa")
 plt.ylabel("Frequência")
 plt.show()
 ```
-![Distribuição da Idade](distribuicao_tarifa.png)
+![Distribuição da Idade](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/distribuicao-tarifa.png?raw=true)
 
 # Gráfico de Distribuição: Classe Socioeconômica
 ```python
@@ -158,6 +128,7 @@ plt.xlabel("Classe")
 plt.ylabel("Número de Passageiros")
 plt.show()
 ```
+![Distribuição da Idade](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/distribuicao-classe.png?raw=true)
 
 # Visualizando taxa de sobrevivência por categorias
 
@@ -168,18 +139,25 @@ plt.title("Taxa de Sobrevivência por Sexo")
 plt.show()
 ```
 
+![Sobrevivência por Sexo](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/sobrevivencia_sexo.png?raw=true)
+
 # Taxa de sobrevivência por categoria: Classe Socioeconômica
 ```python
 sns.barplot(x="Pclass", y="Survived", data=train_data, hue="Pclass", palette="pastel", legend=False)
 plt.title("Taxa de Sobrevivência por Classe")
 plt.show()
 ```
+![Sobrevivência por Sexo](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/sobrevivencia_classe.png?raw=true)
+
 # Taxa de sobrevivência por categoria: Porto de Embarque
 ```python
 sns.barplot(x="Embarked", y="Survived", data=train_data, hue="Embarked", palette="pastel", legend=False)
 plt.title("Taxa de Sobrevivência por Porto de Embarque")
 plt.show()
 ```
+
+![Sobrevivência por Sexo](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/sobrevivencia_porto.png?raw=true)
+
 # Correlação entre variáveis
 ```python
 plt.figure(figsize=(10,8))
@@ -188,6 +166,9 @@ sns.heatmap(corr, annot=True, cmap="vlag", fmt=".2f")
 plt.title("Mapa de Correlação das Variáveis Numéricas")
 plt.show()
 ```
+
+![Distribuição da Idade](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/correlacao.png?raw=true)
+
 # Interpretação das principais correlações
 
 #- Survived & Pclass: Passageiros de classes mais baixas (3ª classe) tiveram menor taxa de sobrevivência.
