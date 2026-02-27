@@ -2,7 +2,7 @@
 
 # **Descrição:**
 
-O "Titanic: Machine Learning from Disaster" é um dos projetos e competições mais famosos e populares da plataforma Kaggle, projetado especificamente para iniciantes em Data Science e Machine Learning.
+O [Titanic: Machine Learning from Disaster](https://www.kaggle.com/competitions/titanic) é um dos projetos e competições mais famosos e populares da plataforma Kaggle, projetado especificamente para iniciantes em Data Science e Machine Learning.
 
 # **O Desafio:**
 
@@ -47,13 +47,13 @@ Mesma estrutura do `train.csv`, **exceto pela ausência da coluna `Survived`**, 
 # **Pipeline**
 1. Entendimento do problema
 2. Exploração inicial dos dados
-3. Pré-processamento (baseline sem tratamento de valores ausentes)
+3. Pré-processamento (baseline)
 4. Modelagem com Random Forest
 5. Avaliação e submissão no Kaggle
 
 # **1. Entendimento do problema**
 
-## **Importação de bibliotecas numpy e pandas:**
+## **Importando as bibliotecas numpy e pandas:**
 
 ```python
 import numpy as np
@@ -61,7 +61,7 @@ import pandas as pd
 import os
 ```
 
-## **Verificação dos arquivos disponíveis:**
+## **Verificando oos arquivos disponíveis:**
 
 ```python
 for dirname, _, filenames in os.walk('/kaggle/input/competitions/titanic/'):
@@ -78,7 +78,7 @@ test_data = pd.read_csv('/kaggle/input/competitions/titanic/test.csv')
 
 # **2. Exploração inicial dos dados:**
 
-## **Visualização dos dados** 
+## **Visualizando os dados** 
 
 in:
 
@@ -114,7 +114,7 @@ out:
 
 O método `.head()` do **pandas** mostra, por padrão, as **primeiras 5 linhas** do DataFrame. O dataset contém **891 linhas no `train.csv`** e **418 linhas no `test.csv`**.
 
-## **Análise inicial: taxa de sobrevivência por gênero** 
+## **Analisando a taxa de sobrevivência por gênero** 
 
 in:
 
@@ -138,28 +138,25 @@ out:
 ```
 
 O arquivo de amostra de submissão em *gender_submission.csv* pressupõe que todas as passageiras sobreviveram (e todos os passageiros do sexo masculino morreram). 
-
-Com a análise inicial, verificamos que aproximadamente **74% das mulheres** sobreviveram, enquanto apenas **19% dos homens** conseguiram sobreviver.
-
-Esse resultado reflete a política de evacuação da época (“mulheres e crianças primeiro”), mostrando que o gênero foi um fator determinante. No entanto, essa análise se baseia em apenas uma coluna (`Sex`). 
+Com a análise inicial, verificamos que aproximadamente **74% das mulheres** sobreviveram, enquanto apenas **19% dos homens** conseguiram sobreviver. Esse resultado reflete a política de evacuação da época (“mulheres e crianças primeiro”), mostrando que o gênero foi um fator determinante. No entanto, essa análise se baseia em apenas uma coluna (`Sex`). 
 
 # **3.Pré Processamento**
 
-## **Definindo as Features**
+## **Importando a classe**
 
 ```python
 from sklearn.ensemble import RandomForestClassifier
+```
 
-## Definição da variável alvo (y)
-
+## **Definindo e selecionando as Features**
+```python
 y = train_data["Survived"]
 
-## Seleção das variáveis explicativas (features)
-
 features = ["Pclass", "Sex", "SibSp", "Parch"]
+```
 
-## Transformação de variáveis categóricas (pd.get_dummies)
-
+## **Transformando as variáveis categóricas**
+```python
 X = pd.get_dummies(train_data[features])
 X_test = pd.get_dummies(test_data[features])
 ```
@@ -169,20 +166,18 @@ X_test = pd.get_dummies(test_data[features])
 ## **Criando o primeiro modelo de Machine Learning**
 
 ```python
-## Criação do modelo Random Forest
-
 model = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=1)
-
-## Treinamento do modelo
-
+```
+## **Treinando o modelo**
+```python
 model.fit(X, y)
-
-## Geração de previsões
-
+```
+## **Gerando as Previsões**
+```python
 predictions = model.predict(X_test)
-
-# Criação do arquivo de submissão
-
+```
+# **Criando o Arquivo de Submissão**
+```python
 output = pd.DataFrame({'PassengerId': test_data.PassengerId, 'Survived': predictions})
 output.to_csv('submission.csv', index=False)
 print("Your submission was successfully saved!")
@@ -207,3 +202,4 @@ A escolha se deve ao fato de que as variáveis utilizadas (`Pclass`, `Sex`, `Sib
 O objetivo foi construir um **baseline simples** e funcional.
 
 Em versões futuras, serão aplicadas técnicas de imputação e engenharia de features para lidar com colunas como `Age`, `Cabin` e `Embarked`, que possuem valores ausentes e podem contribuir para melhorar a performance do modelo.
+
