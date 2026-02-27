@@ -44,12 +44,12 @@ Mesma estrutura do `train.csv`, **exceto pela ausência da coluna `Survived`**, 
 - **Passageiros e tripulação:** Cerca de 2.224 pessoas estavam a bordo.
 - **Mortes:** 1.502 pessoas perderam a vida, tornando-se uma das maiores tragédias marítimas da época.
 
-# **Pipeline**
+# **Pipeline (Baseline)**
 1. Entendimento do problema
 2. Exploração inicial dos dados
 3. Pré-processamento (baseline)
-4. Modelagem com Random Forest
-5. Avaliação e submissão no Kaggle
+4. Modelagem
+5. Avaliação
 
 # **1. Entendimento do problema**
 
@@ -161,7 +161,7 @@ X = pd.get_dummies(train_data[features])
 X_test = pd.get_dummies(test_data[features])
 ```
 
-# **4 - Modelagem com Random Forest**
+# **4 - Modelagem**
 
 ## **Criando o primeiro modelo de Machine Learning**
 
@@ -183,7 +183,7 @@ output.to_csv('submission.csv', index=False)
 print("Your submission was successfully saved!")
 ```
 
-# **5. Avaliação e submissão no Kaggle**
+# **5. Avaliação**
 
 Após treinar o primeiro modelo de Machine Learning (Random Forest), foi gerado o arquivo `submission.csv` e enviado para a competição **Titanic - Machine Learning from Disaster** no Kaggle.
 
@@ -202,4 +202,5 @@ A escolha se deve ao fato de que as variáveis utilizadas (`Pclass`, `Sex`, `Sib
 O objetivo foi construir um **baseline simples** e funcional.
 
 Em versões futuras, serão aplicadas técnicas de imputação e engenharia de features para lidar com colunas como `Age`, `Cabin` e `Embarked`, que possuem valores ausentes e podem contribuir para melhorar a performance do modelo.
+
 
