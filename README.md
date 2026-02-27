@@ -25,12 +25,12 @@ Demonstrar evolução prática em Ciência de Dados:
 - Do **aprendizado inicial** (baseline)  
 - Até a **construção de um case completo** (avançado), aplicando boas práticas de modelagem, avaliação e comunicação de resultados.
 
-## 🛠️ Tecnologias utilizadas
+## Tecnologias utilizadas
 - Python (Pandas, NumPy, Scikit-learn, Seaborn, Matplotlib)  
 - Jupyter Notebook  
 - GitHub (documentação e versionamento)  
 
 ---
 
-📌 **Observação:** Este README apresenta a visão geral do repositório.  
+**Observação:** Este README apresenta a visão geral do repositório.  
 Cada pasta (`baseline/` e `titanic_advanced/`) possui seu próprio README detalhando as etapas específicas de cada versão.
