@@ -191,7 +191,7 @@ Após treinar o primeiro modelo de Machine Learning (Random Forest), foi gerado 
 - **Features**: Pclass, Sex, SibSp, Parch  
 - **Pontuação pública**: 0.77511, considerada um bom resultado para iniciantes e demonstrando capacidade de modelagem preditiva.
 
-![Resultado da submissão](/result.png)
+![Resultado Baseline](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_baseline/image/result.png?raw=true)
 
 ## **Nota sobre valores ausentes**
 
@@ -202,6 +202,3 @@ A escolha se deve ao fato de que as variáveis utilizadas (`Pclass`, `Sex`, `Sib
 O objetivo foi construir um **baseline simples** e funcional.
 
 Em versões futuras, serão aplicadas técnicas de imputação e engenharia de features para lidar com colunas como `Age`, `Cabin` e `Embarked`, que possuem valores ausentes e podem contribuir para melhorar a performance do modelo.
-
-
-
