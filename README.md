@@ -12,8 +12,6 @@ O projeto está dividido em duas partes principais:
   Primeira versão do modelo, construída a partir de um tutorial do Kaggle.  
   - Objetivo: criar um modelo simples e funcional.  
   - Algoritmo: Random Forest.  
-  - Resultado: pontuação pública de **0.77511** no Kaggle.
-  - Local: pasta titanic_baseline/.
 
 **[Advanced](./titanic_advanced/)** 
 
@@ -21,7 +19,6 @@ Versão expandida do projeto, estruturada como um pipeline completo de Data Scie
 - Etapas: tratamento de valores ausentes, engenharia de features (Parte 1 e Parte 2), comparação de algoritmos, métricas avançadas e interpretabilidade.
 - Algoritmos: Logistic Regression e XGBoost.
 - Resultado: pontuação pública de 0.74641 no Kaggle.
-- Local: pasta titanic_advanced/
 
 ## Objetivo
 Demonstrar evolução prática em Ciência de Dados:
@@ -33,7 +30,7 @@ Demonstrar evolução prática em Ciência de Dados:
 - Kaggle Notebook  
 - GitHub (documentação e versionamento)
 
-## Resultados
+## Pontuação Pública (Kaggle)
 
 | Versão     | Modelo           | Features principais                          | Pontuação Pública (Kaggle) |
 |------------|-----------------|----------------------------------------------|----------------------------|
