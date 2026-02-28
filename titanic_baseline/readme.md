@@ -1,4 +1,4 @@
-# **Titanic: Machine Learning from Disaster**
+# **Titanic: Machine Learning from Disaster (Baseline)**
 
 # **Descrição:**
 
@@ -37,23 +37,31 @@ O desafio consiste em utilizar dados reais dos passageiros do Titanic (como idad
 
 Mesma estrutura do `train.csv`, **exceto pela ausência da coluna `Survived`**, que é justamente o alvo a ser previsto.
 
-# **Contexto histórico**
+# **Contexto Histórico**
 
 - **Data:** Na noite de 14 de abril de 1912, o Titanic colidiu com um iceberg no Atlântico Norte e afundou nas primeiras horas do dia 15.
 - **Local:** Aproximadamente 640 km a leste da Ilha de Terra Nova, no Canadá.
 - **Passageiros e tripulação:** Cerca de 2.224 pessoas estavam a bordo.
 - **Mortes:** 1.502 pessoas perderam a vida, tornando-se uma das maiores tragédias marítimas da época.
 
+# **Modelo Construído**
+
+## Floresta Aleatória (Random Forest)
+A Floresta Aleatória é um método de ensemble que combina múltiplas Árvores de Decisão treinadas em diferentes amostras de dados. A previsão final é obtida pela média ou votação das árvores.  
+- **Vantagens**: reduz sobreajuste, lida bem com variáveis categóricas e numéricas.  
+- **Aplicação no Titanic**: utilizada como baseline para capturar relações não lineares entre variáveis.  
+- **Insight**: mostrou boa performance inicial e destacou a importância de variáveis como sexo e classe.
+
 # **Pipeline (Baseline)**
-1. Entendimento do problema
-2. Exploração inicial dos dados
-3. Pré-processamento (baseline)
-4. Modelagem
-5. Avaliação
+1. Coleta e Carregamento dos Dados
+3. Análise Exploratória dos Dados
+4. Pré-processamento 
+5. Modelagem (Random Forest)
+6. Resultado
 
-# **1. Entendimento do problema**
+# **1. Coleta e Carregamento dos Dados**
 
-## **Importando as bibliotecas numpy e pandas:**
+## **Importando as Bibliotecas Numpy e Pandas:**
 
 ```python
 import numpy as np
@@ -61,7 +69,7 @@ import pandas as pd
 import os
 ```
 
-## **Verificando os arquivos disponíveis:**
+## **Verificando os Arquivos Disponíveis:**
 
 ```python
 for dirname, _, filenames in os.walk('/kaggle/input/competitions/titanic/'):
@@ -69,16 +77,16 @@ for filename in filenames:
 print(os.path.join(dirname, filename))
 ```
 
-## **Carregando os dados:**
+## **Carregando os Dados:**
 
 ```python
 train_data = pd.read_csv('/kaggle/input/competitions/titanic/train.csv')
 test_data = pd.read_csv('/kaggle/input/competitions/titanic/test.csv')
 ```
 
-# **2. Exploração inicial dos dados:**
+# **2. Análise Exploratória dos Dados:**
 
-## **Visualizando os dados** 
+## **Visualizando os Dados** 
 
 in:
 
@@ -114,7 +122,7 @@ out:
 
 O método `.head()` do **pandas** mostra, por padrão, as **primeiras 5 linhas** do DataFrame. O dataset contém **891 linhas no `train.csv`** e **418 linhas no `test.csv`**.
 
-## **Analisando a taxa de sobrevivência por gênero** 
+## **Analisando a Taxa de Sobrevivência por Gênero** 
 
 in:
 
@@ -138,37 +146,37 @@ out:
 ```
 
 O arquivo de amostra de submissão em *gender_submission.csv* pressupõe que todas as passageiras sobreviveram (e todos os passageiros do sexo masculino morreram). 
-Com a análise inicial, verificamos que aproximadamente **74% das mulheres** sobreviveram, enquanto apenas **19% dos homens** conseguiram sobreviver. Esse resultado reflete a política de evacuação da época (“mulheres e crianças primeiro”), mostrando que o gênero foi um fator determinante. No entanto, essa análise se baseia em apenas uma coluna (`Sex`). 
+Com a análise inicial, verificamos que aproximadamente **74% das mulheres** sobreviveram, enquanto apenas **19% dos homens** conseguiram sobreviver. Esse resultado reflete a política de evacuação da época (“mulheres e crianças primeiro”), mostrando que o gênero foi um fator determinante. 
 
 # **3.Pré Processamento**
 
-## **Importando a classe**
+## **Importando a Classe**
 
 ```python
 from sklearn.ensemble import RandomForestClassifier
 ```
 
-## **Definindo e selecionando as Features**
+## **Definindo e Selecionando as Features**
 ```python
 y = train_data["Survived"]
 
 features = ["Pclass", "Sex", "SibSp", "Parch"]
 ```
 
-## **Transformando as variáveis categóricas**
+## **Transformando as Variáveis Categóricas**
 ```python
 X = pd.get_dummies(train_data[features])
 X_test = pd.get_dummies(test_data[features])
 ```
 
-# **4 - Modelagem**
+# **4. Modelagem (Random Forest)**
 
-## **Criando o primeiro modelo de Machine Learning**
+## **Criando o Primeiro Modelo de Machine Learning**
 
 ```python
 model = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=1)
 ```
-## **Treinando o modelo**
+## **Treinando o Modelo**
 ```python
 model.fit(X, y)
 ```
@@ -183,7 +191,7 @@ output.to_csv('submission.csv', index=False)
 print("Your submission was successfully saved!")
 ```
 
-# **5. Avaliação**
+# **5. Resultado**
 
 Após treinar o primeiro modelo de Machine Learning (Random Forest), foi gerado o arquivo `submission.csv` e enviado para a competição **Titanic - Machine Learning from Disaster** no Kaggle.
 
@@ -193,12 +201,6 @@ Após treinar o primeiro modelo de Machine Learning (Random Forest), foi gerado 
 
 ![Resultado Baseline](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_baseline/image/result.png?raw=true)
 
-## **Nota sobre valores ausentes**
+## **Nota Sobre Valores Ausentes**
 
-Neste primeiro modelo não foi realizado tratamento de valores ausentes.
-
-A escolha se deve ao fato de que as variáveis utilizadas (`Pclass`, `Sex`, `SibSp`, `Parch`) não apresentam dados faltantes.
-
-O objetivo foi construir um **baseline simples** e funcional.
-
-Em versões futuras, serão aplicadas técnicas de imputação e engenharia de features para lidar com colunas como `Age`, `Cabin` e `Embarked`, que possuem valores ausentes e podem contribuir para melhorar a performance do modelo.
+Neste primeiro modelo não foi realizado tratamento de valores ausentes. A escolha se deve ao fato de que as variáveis utilizadas (`Pclass`, `Sex`, `SibSp`, `Parch`) não apresentam dados faltantes e o objetivo foi construir um baseline simples e funcional. Em versões futuras, serão aplicadas técnicas de imputação e engenharia de features para lidar com colunas como `Age`, `Cabin` e `Embarked`, que possuem valores ausentes e podem contribuir para melhorar a performance do modelo.
