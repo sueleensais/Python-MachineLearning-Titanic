@@ -1,4 +1,4 @@
-# **Titanic: Machine Learning from Disaster**
+# **Titanic: Machine Learning from Disaster** (Advanced)
 
 # **Descrição:**
 
@@ -44,6 +44,20 @@ Mesma estrutura do `train.csv`, **exceto pela ausência da coluna `Survived`**, 
 - **Local:** Aproximadamente 640 km a leste da Ilha de Terra Nova, no Canadá.
 - **Passageiros e tripulação:** Cerca de 2.224 pessoas estavam a bordo.
 - **Mortes:** 1.502 pessoas perderam a vida, tornando-se uma das maiores tragédias marítimas da época.
+
+# **Modelos Construídos**
+
+## Regressão Logística (Logistic Regression)
+A Regressão Logística é um algoritmo de classificação baseado em probabilidade. Utiliza a função sigmoide para transformar a saída em valores entre 0 e 1, representando a probabilidade de uma observação pertencer a uma classe.  
+- **Vantagens**: simples, interpretável e eficiente em problemas lineares.  
+- **Aplicação no Titanic**: prever a probabilidade de sobrevivência com base em variáveis como sexo, idade e classe.  
+- **Insight**: os coeficientes permitem interpretar o impacto de cada variável (ex.: ser mulher aumenta significativamente a chance de sobrevivência).
+
+## XGBoost (Extreme Gradient Boosting)
+O XGBoost é uma implementação otimizada de boosting de árvores de decisão, projetada para velocidade e desempenho.  
+- **Vantagens**: excelente performance em dados tabulares, regularização para evitar overfitting, suporte a paralelização.  
+- **Aplicação no Titanic**: modelo avançado para maximizar acurácia e explorar interações complexas entre variáveis.  
+- **Insight**: alcançou os melhores resultados entre os modelos testados, confirmando padrões históricos de sobrevivência.
 
 # **Pipeline (Advanced)**
 1. Coleta e Carregamento dos Dados
