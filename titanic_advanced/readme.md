@@ -916,7 +916,7 @@ plt.show()
 
 ## Conclusão do Modelo
 
-#=O XGBoost não só teve boa acurácia (~83%), como também apresentou uma capacidade muito alta de discriminar as classes (AUC = 0.91), reforçando a minha escolha como modelo final para submissão.
+O XGBoost não só teve boa acurácia (~83%), como também apresentou uma capacidade muito alta de discriminar as classes (AUC = 0.91), reforçando a minha escolha como modelo final para submissão.
 
 ## Preparando Dados Para Submissão
 
