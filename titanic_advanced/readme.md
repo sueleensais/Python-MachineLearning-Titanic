@@ -38,7 +38,7 @@ O desafio consiste em utilizar dados reais dos passageiros do Titanic (como idad
 
 Mesma estrutura do `train.csv`, **exceto pela ausência da coluna `Survived`**, que é justamente o alvo a ser previsto.
 
-# **Contexto histórico**
+# **Contexto Histórico**
 
 - **Data:** Na noite de 14 de abril de 1912, o Titanic colidiu com um iceberg no Atlântico Norte e afundou nas primeiras horas do dia 15.
 - **Local:** Aproximadamente 640 km a leste da Ilha de Terra Nova, no Canadá.
@@ -46,16 +46,18 @@ Mesma estrutura do `train.csv`, **exceto pela ausência da coluna `Survived`**, 
 - **Mortes:** 1.502 pessoas perderam a vida, tornando-se uma das maiores tragédias marítimas da época.
 
 # **Pipeline (Advanced)**
-1. Coleta e carregamento dos dados
-2. Exploração e limpeza
-3. Engenharia de features
-4. Modelagem (Logistic Regression)
-5. Modelagem (XGBoost)
-6. Comparação de modelos
-7. Fase Final: Previsões com XGBoost
-8. Resultado
+1. Coleta e Carregamento dos Dados
+2. Análise Exploratória dos Dados
+3. Pré-Processamento: Engenharia de Features (Parte 1)
+4. ETL (Extract, Transform, Load)
+5. Pré-Processamento: Engenharia de Features (Parte 2)
+6. Modelagem (Logistic Regression)
+7. Modelagem (XGBoost)
+8. Comparação de Modelos
+9. Fase Final: Previsões com XGBoost
+10. Resultado
 
-# **1. Coleta e carregamento dos dados**
+# **1. Coleta e Carregamento dos Dados**
 
 ## Importação de bibliotecas 
 ```python
@@ -64,7 +66,7 @@ import pandas as pd
 
 import os
 ```
-## Verificação dos arquivos disponíveis
+## Verificação dos Arquivos Disponíveis
 
 ```python
 for dirname, _, filenames in os.walk('/kaggle/input'):
@@ -75,15 +77,15 @@ for dirname, _, filenames in os.walk('/kaggle/input'):
 /kaggle/input/competitions/titanic/gender_submission.csv
 ```
 
-## Carregamento dos dados train e test
+## Carregamento dos Dados
 ```python
 train_data = pd.read_csv("/kaggle/input/competitions/titanic/train.csv")
 test_data = pd.read_csv("/kaggle/input/competitions/titanic/test.csv")
 ```
 
-# Visualização inicial dos dados 
+# **2. Análise Exploratória dos Dados (EDA)**
 
-# Importação das bibliotecas de visualização
+## Importação das Bibliotecas de Visualização
 ```python
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -92,9 +94,7 @@ import seaborn as sns
 sns.set(style="whitegrid")
 ```
 
-# Explorando as distribuições
-
-# Gráfico de Distribuição: Idade
+## Gráfico de Distribuição: Idade
 
 ```python
 plt.figure(figsize=(8,5))
@@ -103,13 +103,12 @@ plt.title("Distribuição da Idade dos Passageiros")
 plt.xlabel("Idade")
 plt.ylabel("Frequência")
 plt.show()
-
 ```
 
 ![Distribuição da Idade](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/distribuicao-idade.png?raw=true)
 
 
-# Gráfico de Distribuição: Tarifa
+## Gráfico de Distribuição: Tarifa
 ```python
 plt.figure(figsize=(8,5))
 sns.histplot(train_data['Fare'], bins=40, kde=True, color="skyblue")
@@ -118,9 +117,9 @@ plt.xlabel("Tarifa")
 plt.ylabel("Frequência")
 plt.show()
 ```
-![Distribuição da Idade](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/distribuicao-tarifa.png?raw=true)
+![Distribuição da Tarifa](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/distribuicao-tarifa.png?raw=true)
 
-# Gráfico de Distribuição: Classe Socioeconômica
+## Gráfico de Distribuição: Classe Socioeconômica
 ```python
 sns.countplot(x='Pclass', data=train_data, hue='Pclass', palette="pastel", legend=False)
 plt.title("Distribuição por Classe Socioeconômica")
@@ -128,11 +127,9 @@ plt.xlabel("Classe")
 plt.ylabel("Número de Passageiros")
 plt.show()
 ```
-![Distribuição da Idade](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/distribuicao-classe.png?raw=true)
+![Distribuição da Classe](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/distribuicao-classe.png?raw=true)
 
-# Visualizando taxa de sobrevivência por categorias
-
-# Taxa de sobrevivência por categoria: Sexo
+## Taxa de Sobrevivência Por Categoria: Sexo
 ```python
 sns.barplot(x="Sex", y="Survived", data=train_data, hue="Sex", palette="pastel", legend=False)
 plt.title("Taxa de Sobrevivência por Sexo")
@@ -141,24 +138,24 @@ plt.show()
 
 ![Sobrevivência por Sexo](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/sobrevivencia_sexo.png?raw=true)
 
-# Taxa de sobrevivência por categoria: Classe Socioeconômica
+## Taxa de Sobrevivência Por Categoria: Classe Socioeconômica
 ```python
 sns.barplot(x="Pclass", y="Survived", data=train_data, hue="Pclass", palette="pastel", legend=False)
 plt.title("Taxa de Sobrevivência por Classe")
 plt.show()
 ```
-![Sobrevivência por Sexo](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/sobrevivencia_classe.png?raw=true)
+![Sobrevivência por Classe](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/sobrevivencia_classe.png?raw=true)
 
-# Taxa de sobrevivência por categoria: Porto de Embarque
+## Taxa de sobrevivência por categoria: Porto de Embarque
 ```python
 sns.barplot(x="Embarked", y="Survived", data=train_data, hue="Embarked", palette="pastel", legend=False)
 plt.title("Taxa de Sobrevivência por Porto de Embarque")
 plt.show()
 ```
 
-![Sobrevivência por Sexo](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/sobrevivencia_porto.png?raw=true)
+![Sobrevivência por Porto](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/sobrevivencia-porto.png?raw=true)
 
-# Correlação entre variáveis
+## Correlação Entre Variáveis
 ```python
 plt.figure(figsize=(10,8))
 corr = train_data.corr(numeric_only=True)
@@ -167,20 +164,21 @@ plt.title("Mapa de Correlação das Variáveis Numéricas")
 plt.show()
 ```
 
-![Distribuição da Idade](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/correlacao.png?raw=true)
+![Correlação](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/correlacao.png?raw=true)
 
-# Interpretação das principais correlações
+## Interpretação das Principais Correlações
 
-#- Survived & Pclass: Passageiros de classes mais baixas (3ª classe) tiveram menor taxa de sobrevivência.
-
+- Survived & Pclass: Passageiros de classes mais baixas (3ª classe) tiveram menor taxa de sobrevivência.
+```python
 train_data.groupby("Pclass")["Survived"].mean()
 Pclass
 1    0.629630
 2    0.472826
 3    0.242363
 Name: Survived, dtype: float64
-#- Survived & Fare: Quem pagou tarifas mais altas teve maior chance de sobreviver.
-
+```
+- Survived & Fare: Quem pagou tarifas mais altas teve maior chance de sobreviver.
+```Python
 train_data[['Fare', 'Survived']].groupby(pd.qcut(train_data['Fare'], 5), observed=False).mean()
 Fare	Survived
 Fare		
@@ -189,26 +187,35 @@ Fare
 (10.5, 21.679]	15.215019	0.424419
 (21.679, 39.688]	28.922592	0.444444
 (39.688, 512.329]	102.629451	0.642045
-#- Pclass & Fare: Forte relação: quanto menor a classe (1ª), maior a tarifa.
+```
+- Pclass & Fare: Forte relação: quanto menor a classe (1ª), maior a tarifa.
+```Python
 train_data.groupby("Pclass")["Fare"].mean()
 Pclass
 1    84.154687
 2    20.662183
 3    13.675550
 Name: Fare, dtype: float64
-# - Age & Pclass: Passageiros da 1ª classe tendem a ser mais velhos
+```
+- Age & Pclass: Passageiros da 1ª classe tendem a ser mais velhos
+```Python
 train_data.groupby("Pclass")["Age"].mean()
 Pclass
 1    38.233441
 2    29.877630
 3    25.140620
 Name: Age, dtype: float64
-# - SibSp & Parch: Ter irmãos/cônjuges a bordo se relaciona com ter pais/filhos também — famílias viajando juntas.
+```
+- SibSp & Parch: Ter irmãos/cônjuges a bordo se relaciona com ter pais/filhos também — famílias viajando juntas.
+```Python
 train_data[["SibSp", "Parch"]].corr()
 SibSp	Parch
 SibSp	1.000000	0.414838
 Parch	0.414838	1.000000
-# - Survived & Age: Leve tendência: passageiros mais velhos sobreviveram menos, mas correlação fraca.
+```
+
+- Survived & Age: Leve tendência: passageiros mais velhos sobreviveram menos, mas correlação fraca.
+```Python
 train_data.groupby(pd.cut(train_data["Age"], bins=[0,12,18,40,60,80]), observed=False)["Survived"].mean()
 Age
 (0, 12]     0.579710
@@ -217,11 +224,17 @@ Age
 (40, 60]    0.390625
 (60, 80]    0.227273
 Name: Survived, dtype: float64
-# Criação da feature FamilySize
+```
+# **3. Pré-Processamento: Engenharia de Features (Parte 1)**
+
+## Criação da Feature FamilySize
+```Python
 train_data["FamilySize"] = train_data["SibSp"] + train_data["Parch"] + 1
 test_data["FamilySize"] = test_data["SibSp"] + test_data["Parch"] + 1
+```
 
-# Verificação
+## Verificação
+```Python
 train_data[["SibSp", "Parch", "FamilySize"]].head(10)
 SibSp	Parch	FamilySize
 0	1	0	2
@@ -234,7 +247,10 @@ SibSp	Parch	FamilySize
 7	3	1	5
 8	0	2	3
 9	1	0	2
-# Taxa de sobrevivência por categoria: Tamanho da Família
+```
+
+## Taxa de Sobrevivência por Categoria: Tamanho da Família
+```Python
 train_data.groupby("FamilySize")["Survived"].mean()
 FamilySize
 1     0.303538
@@ -247,17 +263,26 @@ FamilySize
 8     0.000000
 11    0.000000
 Name: Survived, dtype: float64
-# Gráfico de Distribuição: Tamanho da Família
+```
 
+## Gráfico de Distribuição: Tamanho da Família
+```Python
 sns.barplot(x="FamilySize", y="Survived", data=train_data, hue="FamilySize", palette="pastel", legend=False)
 <Axes: xlabel='FamilySize', ylabel='Survived'>
+```
+![Distribuição da Idade](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/distribuicao-family.png?raw=true)
 
-# Interpretação FamilySize
+## Interpretando Feature Tamanho da Família
+```Python
 #- FamilySize = 1 (sozinhos): sobrevivência baixa (~30%).
 #- FamilySize = 2–4 (famílias pequenas): sobrevivência alta (55%–72%).
 #- FamilySize ≥ 5 (famílias grandes): sobrevivência despenca (20% ou menos).
 #- FamilySize = 8 ou 11: nenhum sobrevivente registrado.
-# Identificando valores ausentes 'train_data'
+```
+# **4. ETL (Extract, Transform, Load)**
+
+## Identificando Valores Ausentes 'train_data'
+```Python
 train_data.isnull().sum()
 PassengerId      0
 Survived         0
@@ -273,7 +298,10 @@ Cabin          687
 Embarked         2
 FamilySize       0
 dtype: int64
-# Identificando valores ausentes 'test_data'
+```
+
+## Identificando Valores Ausentes 'test_data'
+```Python
 test_data.isnull().sum()
 PassengerId      0
 Pclass           0
@@ -288,11 +316,12 @@ Cabin          327
 Embarked         0
 FamilySize       0
 dtype: int64
-# Tratando valores ausentes: Idade
+```
 
-# Método: Imputar valores com mediana
-# Justificativa: A idade é uma variável importante para prever sobrevivência. Utilizar a mediana por grupos (Pclass + Sex) é mais complexo do que utilizar a média geral, visto que passageiros da 1ª classe tendem a ser mais velhos e mulheres/crianças têm idades diferentes dos homens. 
+## Tratando Valores Ausentes: Idade
 
+**Justificativa**: A idade é uma variável importante para prever sobrevivência. Utilizar a mediana por grupos (Pclass + Sex) é mais complexo do que utilizar a média geral, visto que passageiros da 1ª classe tendem a ser mais velhos e mulheres/crianças têm idades diferentes dos homens. 
+```Python
 train_data["Age"] = train_data["Age"].fillna(
     train_data.groupby(["Pclass", "Sex"])["Age"].transform("median")
 )
@@ -300,30 +329,39 @@ train_data["Age"] = train_data["Age"].fillna(
 test_data["Age"] = test_data["Age"].fillna(
     test_data.groupby(["Pclass", "Sex"])["Age"].transform("median")
 )
-# Tratando valores ausentes: Cabine
+```
+## Tratando Valores Ausentes: Cabine
 
-# Justificativa: Contém muitos valores ausentes (~80%), imputar valores seria pouco confiável, portanto remover a coluna é mais seguro. A informação de cabine está fortemente ligada à classe (1ª classe tinha cabine registrada, 3ª classe quase nunca), a variável Pclass serviá para as análises.
+**Justificativa**: Contém muitos valores ausentes (~80%), imputar valores seria pouco confiável, portanto remover a coluna é mais seguro. A informação de cabine está fortemente ligada à classe (1ª classe tinha cabine registrada, 3ª classe quase nunca), a variável Pclass serviá para as análises.
 
+```Python
 train_data.drop("Cabin", axis=1, inplace=True)
 test_data.drop("Cabin", axis=1, inplace=True)
-# Tratando valores ausentes: Tarifa
+```
 
-#Justificativa: Há apenas 1 valor ausente, utilizar a mediana evita distorções causadas por outliers (tarifas muito altas)
+## Tratando Valores Ausentes: Tarifa
 
+**Justificativa**: Há apenas 1 valor ausente, utilizar a mediana evita distorções causadas por outliers (tarifas muito altas)
 
+```Python
 test_data["Fare"] = test_data["Fare"].fillna(test_data["Fare"].median())
-# Tratando valores ausentes: Porto de Embarque
+```
 
-# Justificativa: Apenas 2 valores estão ausentes, preencher com a moda é simples e eficaz.
+## Tratando Valores Ausentes: Porto de Embarque
 
+**Justificativa**: Apenas 2 valores estão ausentes, preencher com a moda é simples e eficaz.
+```Python
 train_data["Embarked"] = train_data["Embarked"].fillna(train_data["Embarked"].mode()[0])
-# Verificando valores ausentes após tratamentos
+```
 
+## Verificando Valores Ausentes Após Tratamentos
+```Python
 print("Valores ausentes no train_data:")
 print(train_data.isnull().sum())
 
 print("\nValores ausentes no test_data:")
 print(test_data.isnull().sum())
+
 Valores ausentes no train_data:
 PassengerId    0
 Survived       0
@@ -352,11 +390,16 @@ Fare           0
 Embarked       0
 FamilySize     0
 dtype: int64
-# Codificação da coluna Sex
+```
+
+## Codificando Variáveis Categóricas: Sexo
+```Python
 train_data = pd.get_dummies(train_data, columns=["Sex"], drop_first=True)
 test_data = pd.get_dummies(test_data, columns=["Sex"], drop_first=True)
+```
 
-# Conferindo resultado
+## Conferindo Resultado
+```
 print(train_data[["Sex_male"]].head())
    Sex_male
 0      True
@@ -364,15 +407,21 @@ print(train_data[["Sex_male"]].head())
 2     False
 3     False
 4      True
-# Legendas
+
+**Legendas**
 
 # - Sex_male = 1 → passageiro é homem
 # - Sex_male = 0 → passageiro é mulher
-# Codificação da coluna Embarked
+```
+
+## Codificando Variáveis Categóricas: Embarked
+```Python
 train_data = pd.get_dummies(train_data, columns=["Embarked"], drop_first=True)
 test_data = pd.get_dummies(test_data, columns=["Embarked"], drop_first=True)
+```
 
-# Conferindo resultado
+## Conferindo Resultado
+```Python
 print(train_data[["Embarked_S", "Embarked_Q"]].head())
    Embarked_S  Embarked_Q
 0        True       False
@@ -385,17 +434,30 @@ print(train_data[["Embarked_S", "Embarked_Q"]].head())
 # - Embarked_S = 1 → embarcou em Southampton
 # - Embarked_Q = 1 → embarcou em Queenstown
 # - Se ambos forem 0 → embarcou em Cherbourg
-# Extraindo o título da coluna Name
+```
 
+# **5. Pré-Processamento: Engenharia de Features (Parte 2)**
+
+## Extraindo o título da coluna Nome
+```Python
 train_data["Title"] = train_data["Name"].str.extract(r',\s*([^\.]*)\s*\.', expand=False)
 test_data["Title"] = test_data["Name"].str.extract(r',\s*([^\.]*)\s*\.', expand=False)
-# Transformando títulos em colunas binárias
+```
+
+## Transformando Títulos em Colunas Binárias
+```Python
 train_data = pd.get_dummies(train_data, columns=["Title"], drop_first=True)
 test_data = pd.get_dummies(test_data, columns=["Title"], drop_first=True)
-# Criando a coluna Title a partir da coluna Name
+```
+
+## Criando a coluna Title a Partir da Coluna Name
+```Python
 train_data["Title"] = train_data["Name"].str.extract(r',\s*([^\.]*)\s*\.', expand=False)
 test_data["Title"] = test_data["Name"].str.extract(r',\s*([^\.]*)\s*\.', expand=False)
-# Visualizando a nova coluna
+```
+
+## Visualizando a Nova Coluna
+```Python
 print(train_data[["Name", "Title"]].head(10))
                                                 Name   Title
 0                            Braund, Mr. Owen Harris      Mr
@@ -408,6 +470,7 @@ print(train_data[["Name", "Title"]].head(10))
 7                     Palsson, Master. Gosta Leonard  Master
 8  Johnson, Mrs. Oscar W (Elisabeth Vilhelmina Berg)     Mrs
 9                Nasser, Mrs. Nicholas (Adele Achem)     Mrs
+
 # Legendas
 
 # - Crianças → Master.
@@ -415,12 +478,17 @@ print(train_data[["Name", "Title"]].head(10))
 # - Mulheres casadas → Mrs.
 # - Homens → Mr.
 # - Títulos raros (Lady, Countess, Capt" → Rare.
-# Verificando títulos únicos
+```
 
+## Verificando Títulos Únicos
+```Python
 print(train_data["Title"].unique())
 ['Mr' 'Mrs' 'Miss' 'Master' 'Don' 'Rev' 'Dr' 'Mme' 'Ms' 'Major' 'Lady'
  'Sir' 'Mlle' 'Col' 'Capt' 'the Countess' 'Jonkheer']
-# Conferindo a frequência
+```
+
+## Conferindo a Frequência
+```Python
 print(train_data["Title"].value_counts())
 Title
 Mr              517
@@ -441,18 +509,25 @@ Capt              1
 the Countess      1
 Jonkheer          1
 Name: count, dtype: int64
-# Definindo títulos raros
+```
 
+## Definindo Títulos Raros
+```Python
 rare_titles = ["Lady", "Countess", "Capt", "Col", "Don", "Dr", 
                "Major", "Rev", "Sir", "Jonkheer", "Dona"]
 
 train_data["Title"] = train_data["Title"].replace(rare_titles, "Rare")
 test_data["Title"] = test_data["Title"].replace(rare_titles, "Rare")
-# Normalizando equivalentes
+```
 
+## Normalizando Equivalentes
+```Python
 train_data["Title"] = train_data["Title"].replace({"Mlle": "Miss", "Ms": "Miss", "Mme": "Mrs"})
 test_data["Title"] = test_data["Title"].replace({"Mlle": "Miss", "Ms": "Miss", "Mme": "Mrs"})
-# Conferindo o resultado
+```
+
+## Conferindo o Resultado
+```Python
 print(train_data["Title"].value_counts())
 Title
 Mr              517
@@ -462,11 +537,16 @@ Master           40
 Rare             22
 the Countess      1
 Name: count, dtype: int64
-# Codificação da coluna Title
+```
+
+## Codificando a Coluna Title
+```Python
 train_data = pd.get_dummies(train_data, columns=["Title"], drop_first=True)
 test_data = pd.get_dummies(test_data, columns=["Title"], drop_first=True)
+```
 
-# Conferindo resultado
+## Conferindo Resultado
+```Python
 print(train_data.filter(like="Title").head())
    Title_Col  Title_Don  Title_Dr  Title_Jonkheer  Title_Lady  Title_Major  \
 0      False      False     False           False       False        False   
@@ -497,18 +577,25 @@ print(train_data.filter(like="Title").head())
 4       False               False  
 
 [5 rows x 21 columns]
-#  Features (X) e Target (y)
+```
 
+## Separando Features (x) e Target (y)
+```Python
 # Definindo o alvo (y)
 y = train_data["Survived"]
 
 # O alvo é a coluna Survived, que indica se o passageiro sobreviveu ou não.
-# Definindo as features (X)
+```
+
+## Definindo as Features (x)
+```python
 X = train_data.drop(["Survived", "PassengerId", "Name", "Ticket"], axis=1)
 
-# Removemos apenas colunas que não ajudam o modelo (PassengerId, Name, Ticket
-# Conferindo o resultado
+# Removemos apenas colunas que não ajudam o modelo (PassengerId, Name, Ticket)
+```
 
+## Conferindo o Resultado
+```python
 print(X.head())
 print(y.head())
    Pclass   Age  SibSp  Parch     Fare  FamilySize  Sex_male  Embarked_Q  \
@@ -546,33 +633,44 @@ print(y.head())
 3    1
 4    0
 Name: Survived, dtype: int64
-# Modelo de Machine Learning: Logistic Regression
+```
+# **6. Modelagem (Logistic Regression)**
 
-# Importando bibliotecas
+## Importando Bibliotecas
+```python
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-# Divindo os dados em treino e validação
+```
 
+## Divindo os Dados em Treino e Validação
+```python
 X_train, X_val, y_train, y_val = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
 # - 80%: treino
 # - 20%: validação
-# Criando o modelo
+```
+
+## Criando o Modelo
+```python
 model = LogisticRegression(max_iter=1000)
+```
 
-# Treinando o modelo
+
+## Treinando o Modelo
+```python
 model.fit(X_train, y_train)
+```
 
-LogisticRegression
-?i
-LogisticRegression(max_iter=1000)
-# Fazendo previsões
+## Fazendo Previsões
+```python
 y_pred = model.predict(X_val)
-# Avaliando o modelo
+```
 
+## Avaliando o Modelo
+```python
 print("Acurácia:", accuracy_score(y_val, y_pred))
 print("Matriz de confusão:\n", confusion_matrix(y_val, y_pred))
 print("Relatório de classificação:\n", classification_report(y_val, y_pred))
@@ -589,42 +687,36 @@ Relatório de classificação:
     accuracy                           0.82       179
    macro avg       0.81      0.81      0.81       179
 weighted avg       0.82      0.82      0.82       179
+```
 
-# Modelo de Machine Learning: XGBoost
+# **7. Modelagem (XGBoost)** 
 
-# Importando bibliotecas
+## Importando Bibliotecas
+```python
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-# Criando o modelo
-from xgboost import XGBClassifier
+```
 
+## Criando o Modelo
+```python
 xgb_model = XGBClassifier(
     random_state=42,
     eval_metric="logloss",
     tree_method="hist"  # ou "approx"
 )
+```
 
-
-# Treinando o modelo
+## Treinando o Modelo
+```python
 xgb_model.fit(X_train.values, y_train.values)
-
-XGBClassifier
-?i
-XGBClassifier(base_score=None, booster=None, callbacks=None,
-              colsample_bylevel=None, colsample_bynode=None,
-              colsample_bytree=None, device=None, early_stopping_rounds=None,
-              enable_categorical=False, eval_metric='logloss',
-              feature_types=None, feature_weights=None, gamma=None,
-              grow_policy=None, importance_type=None,
-              interaction_constraints=None, learning_rate=None, max_bin=None,
-              max_cat_threshold=None, max_cat_to_onehot=None,
-              max_delta_step=None, max_depth=None, max_leaves=None,
-              min_child_weight=None, missing=nan, monotone_constraints=None,
-              multi_strategy=None, n_estimators=None, n_jobs=None,
-              num_parallel_tree=None, ...)
-# Fazendo previsões
+```
+## Fazendo Previsões
+```python
 y_pred_xgb = xgb_model.predict(X_val.values)
-# Avaliando o modelo
+```
+
+## Avaliando o Modelo
+```python
 print("Acurácia XGB:", accuracy_score(y_val, y_pred_xgb))
 print("Matriz de confusão:\n", confusion_matrix(y_val, y_pred_xgb))
 print("Relatório de classificação:\n", classification_report(y_val, y_pred_xgb))
@@ -641,10 +733,12 @@ Relatório de classificação:
     accuracy                           0.83       179
    macro avg       0.82      0.82      0.82       179
 weighted avg       0.83      0.83      0.83       179
+```
 
-# Avaliando modelos
+ # **8. Comparando os Modelos**
 
-# Guardando métricas principais
+## Guardando Métricas Principais
+```python
 results = {
     "Logistic Regression": {
         "accuracy": 0.8156,  # substitua pelo valor real do seu output
@@ -661,7 +755,10 @@ results = {
         "recall_class_1": 0.77
     }
 }
-# Exibindo comparação
+```
+
+## Exibindo a Comparação
+```python
 import pandas as pd
 comparison = pd.DataFrame(results).T
 print(comparison)
@@ -671,34 +768,46 @@ XGBoost                0.8268               0.84            0.87
 
                      precision_class_1  recall_class_1  
 Logistic Regression               0.77            0.78  
-XGBoost                           0.80            0.77  
-# Interpretando a comparação
+XGBoost                           0.80            0.77
+```
+
+## Interpretando a Comparação
 
 #- Acurácia geral: XGBoost teve desempenho ligeiramente melhor.
 #- Classe 0 (não sobreviveu): XGBoost teve recall maior (acerta mais quem não sobreviveu).
 #- Classe 1 (sobreviveu): Regressão Logística teve recall um pouco maior (acerta mais sobreviventes).
-# Ensemble: Importando classe
-from sklearn.ensemble import VotingClassifier
-# Convertendo para NumPy antes de treinar o ensemble
-ensemble_model.fit(X_train.values, y_train.values)
----------------------------------------------------------------------------
-NameError                                 Traceback (most recent call last)
-/tmp/ipykernel_17/2814676135.py in <cell line: 0>()
-      1 # Convertendo para NumPy antes de treinar o ensemble
-----> 2 ensemble_model.fit(X_train.values, y_train.values)
 
-NameError: name 'ensemble_model' is not defined
-# Recriando os modelos
+## Importando Classe Para Criação de Ensemble
+```python
+from sklearn.ensemble import VotingClassifier
+```
+
+## Convertendo para NumPy
+```python
+ensemble_model.fit(X_train.values, y_train.values)
+```
+
+## Recriando os Modelos
+```python
 logreg_model = LogisticRegression(max_iter=1000, random_state=42)
 xgb_model = XGBClassifier(random_state=42, eval_metric="logloss", tree_method="hist")
-# Criando ensemble 
+```
+
+## Criando Ensemble 
+```python
 ensemble_model = VotingClassifier(
     estimators=[("logreg", logreg_model), ("xgb", xgb_model)],
     voting="soft"
 )
-# Treinando ensemble
+```
+
+## Treinando Ensemble
+```python
 ensemble_model.fit(X_train.values, y_train.values)
-# Avaliando o desempenho
+```
+
+## Avaliando o Desempenho
+```python
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
 y_pred_ensemble = ensemble_model.predict(X_val.values)
@@ -706,40 +815,62 @@ y_pred_ensemble = ensemble_model.predict(X_val.values)
 print("Acurácia Ensemble:", accuracy_score(y_val, y_pred_ensemble))
 print("Matriz de confusão:\n", confusion_matrix(y_val, y_pred_ensemble))
 print("Relatório de classificação:\n", classification_report(y_val, y_pred_ensemble))
-# Interpretando o resultado do ensemble
-#- Acurácia: ~83% → manteve o nível do XGBoost.
-#- Classe 0 (não sobreviveu): recall 0.88 → o ensemble acertou ainda mais quem não sobreviveu.
-#- Classe 1 (sobreviveu): recall 0.76 → ficou um pouco abaixo da regressão logística (0.78) e do XGBoost (0.77).
-# Fase Final: Previsões com XGBoost
+```
 
-# Após comparar Logistic Regression (~82% de acurácia), XGBoost (~83%) e Ensemble (~83%), optei por utilizar o **XGBoost** como modelo final. Ele apresentou melhor acurácia geral, boa estabilidade e é amplamente reconhecido em aplicações reais de Machine Learning. 
-# Treinamento XGBoost
+## Interpretando o resultado do ensemble
+- Acurácia: ~83% → manteve o nível do XGBoost.
+- Classe 0 (não sobreviveu): recall 0.88 → o ensemble acertou ainda mais quem não sobreviveu.
+- Classe 1 (sobreviveu): recall 0.76 → ficou um pouco abaixo da regressão logística (0.78) e do XGBoost (0.77).
+
+# **9. Fase Final: Previsões com XGBoost**
+
+Após comparar Logistic Regression (~82% de acurácia), XGBoost (~83%) e Ensemble (~83%), optei por utilizar o **XGBoost** como modelo final. Ele apresentou melhor acurácia geral, boa estabilidade e é amplamente reconhecido em aplicações reais de Machine Learning. 
+
+## Treinando o XGBoost
+```python
 xgb_model.fit(X_train.values, y_train.values)
-# Importação das funções
+```
+
+## Importando Funções
+```python
 from xgboost import plot_importance
 import matplotlib.pyplot as plt
+```
 
-# Plotando as 10 features mais importantes
+## Plotando as 10 Features Mais Importantes
+```python
 plot_importance(xgb_model, max_num_features=10)
 plt.title("Top 10 Features - XGBoost")
 plt.show()
-# Gráfico de avaliação: Matriz de Confusão
-from sklearn.metrics import confusion_matrix
+```
+
+## Gráfico de avaliação: Matriz de Confusão
+```python
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
 
 cm = confusion_matrix(y_val, y_pred_xgb)
 disp = ConfusionMatrixDisplay(confusion_matrix=cm)
 disp.plot()
 plt.title("Matriz de Confusão - XGBoost")
 plt.show()
-# Interpretando Matriz de Confusão
-#- O modelo é forte em identificar quem não sobreviveu (91 acertos contra apenas 14 erros).
-#- Ele ainda perde alguns sobreviventes (17 falsos negativos), mostrando que é mais conservador e tende a prever “não sobreviveu” com mais confiança.
-#- A acurácia geral é de aproximadamente 83%, consistente com suas métricas anteriores.
-# Importação das funções
+```
+![Matriz de Confusão](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/matriz-confusao.png?raw=true)
+
+## Interpretando Matriz de Confusão
+- O modelo é forte em identificar quem não sobreviveu (91 acertos contra apenas 14 erros).
+- Ele ainda perde alguns sobreviventes (17 falsos negativos), mostrando que é mais conservador e tende a prever “não sobreviveu” com mais confiança.
+- A acurácia geral é de aproximadamente 83%, consistente com suas métricas anteriores.
+
+## Gráfico de avaliação: Curva ROC
+
+```python
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
+```
 
-# Probabilidades de sobrevivência (classe 1)
+## Probabilidades de sobrevivência (classe 1)
+```python
 y_proba = xgb_model.predict_proba(X_val.values)[:, 1]
 
 # Calcular pontos da curva ROC
@@ -755,34 +886,66 @@ plt.ylabel("Taxa de Verdadeiros Positivos")
 plt.title("Curva ROC - XGBoost")
 plt.legend(loc="lower right")
 plt.show()
-# Interpretando Gráfico
-#- AUC = 0.91 → excelente desempenho. Isso significa que o modelo tem 91% de chance de distinguir corretamente entre sobreviventes e não sobreviventes.
-#- A curva azul está bem acima da diagonal → mostra que o modelo é muito melhor que o acaso.
-#- Quanto mais próximo de 1 o AUC, melhor a separação entre classes. Valores acima de 0.9 são considerados fortes em classificação binária.
-# Conclusão do modelo
+```
+![Matriz de Confusão](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/ROC.png?raw=true)
+
+## Interpretando Gráfico
+- Um AUC de 0.90 significa que o modelo tem alta capacidade de separar sobreviventes de não sobreviventes.
+- Quanto mais a curva se aproxima do canto superior esquerdo, melhor o desempenho.
+- O fato da curva estar bem acima da diagonal mostra que o modelo é muito melhor do que uma classificação aleatória.
+
+## Conclusão do Modelo
 
 #=O XGBoost não só teve boa acurácia (~83%), como também apresentou uma capacidade muito alta de discriminar as classes (AUC = 0.91), reforçando a minha escolha como modelo final para submissão.
-# Preparando dados para submissão
-# Removendo colunas duplicadas em treino e teste
+
+## Preparando Dados Para Submissão
+
+## Removendo Colunas Duplicadas em Treino e Teste
+```python
 train_data = train_data.loc[:, ~train_data.columns.duplicated()]
 test_data  = test_data.loc[:, ~test_data.columns.duplicated()]
+```
 
-# Concatenando para aplicar get_dummies de uma vez
+## Concatenando Para Aplicar get_dummies de Uma Vez
+```python
 full_data = pd.concat([train_data.drop("Survived", axis=1), test_data], axis=0)
+```
 
-# Aplicando get_dummies
+## Aplicando get_dummies
+```python
 full_data = pd.get_dummies(full_data, drop_first=True)
+```
 
-# Separando novamente
+## Separando Novamente
+```python
 X_train = full_data.iloc[:len(train_data), :]
 X_test  = full_data.iloc[len(train_data):, :]
 y_train = train_data["Survived"]
-# Treinando o modelo
+```
+
+## Treinando o Modelo
+```python
 xgb_model.fit(X_train.values, y_train.values)
 xgb_predictions = xgb_model.predict(X_test.values)
-# Gerando submissão
+```
+
+## Gerando Submissão
+```python
 submission_xgb = pd.DataFrame({
     "PassengerId": test_data["PassengerId"],
     "Survived": xgb_predictions
 })
 submission_xgb.to_csv("submission_xgb.csv", index=False)
+```
+# **10. Resultado**
+Após aplicar o pipeline avançado de pré-processamento e engenharia de features, treinei o modelo XGBoost. O arquivo submission.csv foi gerado e enviado para a competição Titanic - Machine Learning from Disaster no Kaggle.
+
+- Modelo: XGBoost
+- Features utilizadas: Pclass, Sex, SibSp, Parch, FamilySize, Title (extraído do nome), além das colunas codificadas e tratadas.
+- Pontuação pública: 0.74641
+  
+![Resultado Advanced](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/result.png?raw=true)
+
+# **Conclusão**
+
+O modelo XGBoost obteve um score inferior ao modelo Random Forest utilizado no baseline (com score 0.77511). Isso mostra que, apesar do pipeline avançado incluir mais etapas de engenharia de features e pré-processamento, o modelo XGBoost nessa configuração inicial não superou o desempenho do Random Forest.
