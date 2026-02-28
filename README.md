@@ -37,7 +37,7 @@ Demonstrar evolução prática em Ciência de Dados:
 | **Baseline** | Random Forest   | Pclass, Sex, SibSp, Parch                   | **0.77511**                |
 | **Advanced** | XGBoost         | Pclass, Sex, SibSp, Parch, FamilySize, Title | **0.74641**                |
  
-Apesar do resultado inicial do modelo avançado ser inferior ao baseline, o pipeline trouxe maior robustez metodológica e abre espaço para otimizações futuras.
+Apesar de o resultado inicial do modelo avançado ser inferior ao baseline, o pipeline trouxe maior robustez metodológica e abre espaço para otimizações futuras.
 
 ---
 
