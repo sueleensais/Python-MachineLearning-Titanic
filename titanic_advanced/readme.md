@@ -49,15 +49,21 @@ Mesma estrutura do `train.csv`, **exceto pela ausência da coluna `Survived`**, 
 
 ## Regressão Logística (Logistic Regression)
 A Regressão Logística é um algoritmo de classificação baseado em probabilidade. Utiliza a função sigmoide para transformar a saída em valores entre 0 e 1, representando a probabilidade de uma observação pertencer a uma classe.  
-- **Vantagens**: simples, interpretável e eficiente em problemas lineares.  
-- **Aplicação no Titanic**: prever a probabilidade de sobrevivência com base em variáveis como sexo, idade e classe.  
-- **Insight**: os coeficientes permitem interpretar o impacto de cada variável (ex.: ser mulher aumenta significativamente a chance de sobrevivência).
+- **Vantagens**: Simples, interpretável e eficiente em problemas lineares.  
+- **Aplicação no Titanic**: Prever a probabilidade de sobrevivência com base em variáveis como sexo, idade e classe.  
+- **Insight**: Os coeficientes permitem interpretar o impacto de cada variável (ex.: ser mulher aumenta significativamente a chance de sobrevivência).
 
 ## XGBoost (Extreme Gradient Boosting)
 O XGBoost é uma implementação otimizada de boosting de árvores de decisão, projetada para velocidade e desempenho.  
-- **Vantagens**: excelente performance em dados tabulares, regularização para evitar overfitting, suporte a paralelização.  
-- **Aplicação no Titanic**: modelo avançado para maximizar acurácia e explorar interações complexas entre variáveis.  
-- **Insight**: alcançou os melhores resultados entre os modelos testados, confirmando padrões históricos de sobrevivência.
+- **Vantagens**: Excelente performance em dados tabulares, regularização para evitar overfitting, suporte a paralelização.  
+- **Aplicação no Titanic**: Modelo avançado para maximizar acurácia e explorar interações complexas entre variáveis.  
+- **Insight**: Alcançou os melhores resultados entre os modelos testados, confirmando padrões históricos de sobrevivência.
+
+## Ensemble (LogReg + XGB)
+O Ensemble combina diferentes algoritmos de Machine Learning para aproveitar as forças de cada um. Neste projeto, foi utilizado um VotingClassifier com Logistic Regression e XGBoost, realizando votação “soft” (baseada em probabilidades).
+- **Vantagens**: Une a interpretabilidade da Regressão Logística com a performance do XGBoost, reduzindo o risco de overfitting e equilibrando precisão e recall entre classes.
+- **Aplicação no Titanic**: Prever a sobrevivência dos passageiros combinando a capacidade da Logistic Regression de identificar sobreviventes com a força do XGBoost em identificar não sobreviventes.
+- **Insight**: Manteve acurácia semelhante ao XGBoost (~83%), mas aumentou o recall da classe “não sobreviveu” (0.88), mostrando que a combinação de modelos pode trazer ganhos específicos mesmo sem superar o melhor modelo isolado em acurácia geral.
 
 # **Pipeline (Advanced)**
 1. Coleta e Carregamento dos Dados
@@ -287,12 +293,12 @@ sns.barplot(x="FamilySize", y="Survived", data=train_data, hue="FamilySize", pal
 ![Distribuição da Idade](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/distribuicao-family.png?raw=true)
 
 ## Interpretando Feature Tamanho da Família
-```Python
-#- FamilySize = 1 (sozinhos): sobrevivência baixa (~30%).
-#- FamilySize = 2–4 (famílias pequenas): sobrevivência alta (55%–72%).
-#- FamilySize ≥ 5 (famílias grandes): sobrevivência despenca (20% ou menos).
-#- FamilySize = 8 ou 11: nenhum sobrevivente registrado.
-```
+
+- FamilySize = 1 (sozinhos): sobrevivência baixa (~30%).
+- FamilySize = 2–4 (famílias pequenas): sobrevivência alta (55%–72%).
+- FamilySize ≥ 5 (famílias grandes): sobrevivência despenca (20% ou menos).
+- FamilySize = 8 ou 11: nenhum sobrevivente registrado.
+
 # **4. ETL (Extract, Transform, Load)**
 
 ## Identificando Valores Ausentes 'train_data'
@@ -421,12 +427,12 @@ print(train_data[["Sex_male"]].head())
 2     False
 3     False
 4      True
+```
 
 **Legendas**
 
-# - Sex_male = 1 → passageiro é homem
-# - Sex_male = 0 → passageiro é mulher
-```
+- Sex_male = 1 → passageiro é homem
+- Sex_male = 0 → passageiro é mulher
 
 ## Codificando Variáveis Categóricas: Embarked
 ```Python
@@ -443,12 +449,12 @@ print(train_data[["Embarked_S", "Embarked_Q"]].head())
 2        True       False
 3        True       False
 4        True       False
-# Legendas
-
-# - Embarked_S = 1 → embarcou em Southampton
-# - Embarked_Q = 1 → embarcou em Queenstown
-# - Se ambos forem 0 → embarcou em Cherbourg
 ```
+**Legendas**
+
+- Embarked_S = 1 → embarcou em Southampton
+- Embarked_Q = 1 → embarcou em Queenstown
+- Se ambos forem 0 → embarcou em Cherbourg
 
 # **5. Pré-Processamento: Engenharia de Features (Parte 2)**
 
@@ -484,15 +490,15 @@ print(train_data[["Name", "Title"]].head(10))
 7                     Palsson, Master. Gosta Leonard  Master
 8  Johnson, Mrs. Oscar W (Elisabeth Vilhelmina Berg)     Mrs
 9                Nasser, Mrs. Nicholas (Adele Achem)     Mrs
-
-# Legendas
-
-# - Crianças → Master.
-# - Mulheres solteiras → Miss.
-# - Mulheres casadas → Mrs.
-# - Homens → Mr.
-# - Títulos raros (Lady, Countess, Capt" → Rare.
 ```
+
+**Legendas**
+
+- Crianças → Master.
+- Mulheres solteiras → Miss.
+- Mulheres casadas → Mrs.
+- Homens → Mr.
+- Títulos raros (Lady, Countess, Capt" → Rare.
 
 ## Verificando Títulos Únicos
 ```Python
@@ -594,8 +600,9 @@ print(train_data.filter(like="Title").head())
 ```
 
 ## Separando Features (x) e Target (y)
+
+# Definindo o Target (y)
 ```Python
-# Definindo o alvo (y)
 y = train_data["Survived"]
 
 # O alvo é a coluna Survived, que indica se o passageiro sobreviveu ou não.
@@ -605,7 +612,7 @@ y = train_data["Survived"]
 ```python
 X = train_data.drop(["Survived", "PassengerId", "Name", "Ticket"], axis=1)
 
-# Removemos apenas colunas que não ajudam o modelo (PassengerId, Name, Ticket)
+# Remoçao apenas das colunas que não ajudam o modelo (PassengerId, Name, Ticket)
 ```
 
 ## Conferindo o Resultado
@@ -671,7 +678,6 @@ X_train, X_val, y_train, y_val = train_test_split(
 ```python
 model = LogisticRegression(max_iter=1000)
 ```
-
 
 ## Treinando o Modelo
 ```python
@@ -755,14 +761,14 @@ weighted avg       0.83      0.83      0.83       179
 ```python
 results = {
     "Logistic Regression": {
-        "accuracy": 0.8156,  # substitua pelo valor real do seu output
+        "accuracy": 0.8156,  
         "precision_class_0": 0.85,
         "recall_class_0": 0.84,
         "precision_class_1": 0.77,
         "recall_class_1": 0.78
     },
     "XGBoost": {
-        "accuracy": 0.8268,  # substitua pelo valor real do seu output
+        "accuracy": 0.8268,  
         "precision_class_0": 0.84,
         "recall_class_0": 0.87,
         "precision_class_1": 0.80,
@@ -787,9 +793,9 @@ XGBoost                           0.80            0.77
 
 ## Interpretando a Comparação
 
-#- Acurácia geral: XGBoost teve desempenho ligeiramente melhor.
-#- Classe 0 (não sobreviveu): XGBoost teve recall maior (acerta mais quem não sobreviveu).
-#- Classe 1 (sobreviveu): Regressão Logística teve recall um pouco maior (acerta mais sobreviventes).
+- Acurácia geral: XGBoost teve desempenho ligeiramente melhor.
+- Classe 0 (não sobreviveu): XGBoost teve recall maior (acerta mais quem não sobreviveu).
+- Classe 1 (sobreviveu): Regressão Logística teve recall um pouco maior (acerta mais sobreviventes).
 
 ## Importando Classe Para Criação de Ensemble
 ```python
@@ -959,6 +965,15 @@ Após aplicar o pipeline avançado de pré-processamento e engenharia de feature
 - Pontuação pública: 0.74641
   
 ![Resultado Advanced](https://github.com/sueleensais/Python-MachineLearning-Titanic/blob/main/titanic_advanced/images/result.png?raw=true)
+
+### Comparação de Modelos
+
+| Modelo               | Acurácia | Precision (Classe 0) | Recall (Classe 0) | Precision (Classe 1) | Recall (Classe 1) | Observações |
+|----------------------|----------|----------------------|-------------------|----------------------|-------------------|-------------|
+| Random Forest        | 0.7751   | -                    | -                 | -                    | -                 | Baseline simples, bom desempenho inicial |
+| Logistic Regression  | 0.8156   | 0.85                 | 0.84              | 0.77                 | 0.78              | Interpretável, bom recall para sobreviventes |
+| XGBoost              | 0.8268   | 0.84                 | 0.87              | 0.80                 | 0.77              | Melhor acurácia geral, forte em não sobreviventes |
+| Ensemble (LogReg+XGB)| ~0.83    | 0.84                 | 0.88              | 0.79                 | 0.76              | Combina modelos, recall máximo para não sobreviventes |
 
 # **Conclusão**
 
